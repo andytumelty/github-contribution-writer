@@ -44,16 +44,28 @@ offset = [1,5]
 # variant so different objects are used
 output = Array.new(lines) { Array.new(width, 0) }
 
-# TODO wrap this in function and add offset to output
-# for every line of the character
-for n in (0..A.size-1) do
-    # for every block in the line
-    for m in (0..A[0].size-1)
-        # add to output
-        output[n][m] = A[n][m]
+def add_character(character, output, offset)
+    # output = output array
+    # character = character array
+    # offset = offset in form [ y offset, x offset ] e.g. [1,2]
+    # TODO can this be done with a map + reduce instead?
+    for n in (0..character.size-1) do
+        # for every block in the line
+        for m in (0..character[0].size-1)
+            # add to output
+            output[n + offset[0]][m + offset[1]] = character[n][m]
+        end
     end
+    return output
 end
 
+output = add_character(Y, output, offset)
+offset[1] += 4
+output = add_character(O, output, offset)
+offset[1] += 4
+output = add_character(BANG, output, offset)
+
+# print output
 output.each do |line|
     line.each do |val|
         #TODO make print actually representative (maybe HTML?)
