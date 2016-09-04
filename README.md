@@ -4,7 +4,7 @@ Y'know that github contribution summary? It's a bit boring isn't it?
 
 ![Before image](https://raw.githubusercontent.com/laycat/github-contribution-writer/master/before.png)
 
-But to me it looks like a canvas. So I decided to write a message on mine:
+Mine's so empty it looks like a canvas. So I wrote a message to liven it up a bit:
 
 ![After image](https://raw.githubusercontent.com/laycat/github-contribution-writer/master/after.png)
 
