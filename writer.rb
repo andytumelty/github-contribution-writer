@@ -31,8 +31,13 @@
 # character constants
 load 'characters.rb'
 
-width = 10
-lines = 5
+# github contribution summary is 54ish wide
+# each character is 4x5 (with 1px gap at right) so 13 character max depending
+# on starting offset
+width = 52
+lines = 7
+# where to start the message in the array in for form [y,x]
+offset = [1,5]
 
 # if Array.new uses (lines, Array.new...) then same object is used for each line
 # which means a change to one line = a change to them all. Instead use block
