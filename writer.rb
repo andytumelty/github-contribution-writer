@@ -44,19 +44,23 @@ letter_height = 5
 
 # USER INPUT
 #message = "YO! Bo) 123"
-puts "What message do you want to write?"
-puts "NB: Github can fix about 13 characters into your summary if you set the"
-puts "x offset to 0. If you go over this, commits will be written in the future"
-puts "i.e. will start to show up in your contribution summary _eventually_"
-message = ''
-while message.empty?
+
+def get_message
+    print "message: "
     message = gets.chomp
+    if message.empty?
+        puts "message can't be empty"
+        message = get_message
+    elsif message != message.match(/[A-Z0-9o:;!()|=+-? ]*/).to_s
+        puts "message can only the following characters: A-Z0-9o:;!()|=+-?"
+        message = get_message
+    end
+    return message
 end
 
-# TODO check the message only contains supported characters
-supported_characters = /[A-Z0-9o:;!()|=+-?]/
+message = get_message
 
-puts "How many squares across should I start from? (default: 5)"
+print "x offset (default 5): "
 offset_x = gets.chomp
 if offset_x.empty?
     offset_x = 5
@@ -64,7 +68,7 @@ else
     offset_x = offset_x.to_i
 end
 
-puts "How many squares down should I start from? (default: 1)"
+print "y offset (default 1): "
 offset_y = gets.chomp
 if offset_y.empty?
     offset_y = 1
@@ -75,18 +79,13 @@ end
 # where to start the message in the array in for form [y,x]
 offset = [offset_y, offset_x]
 
-puts "How many times should I commit when writing your contribution summary? (default: 20)"
-puts "NB: this is pretty personal, it seems to come out rather nicely if you check what"
-puts "your current max daily commit history has been and double that."
-puts "If this is too low, the message won't show, if it's too high then your actual commit"
-puts "history will fade into the background (but your might want that...)"
+print "commit times: "
 commit_times = gets.chomp
 if commit_times.empty?
     commit_times = 20
 else
     commit_times = commit_times.to_i
 end
-
 
 # if Array.new uses (lines, Array.new...) then same object is used for each line
 # which means a change to one line = a change to them all. Instead use block
@@ -119,7 +118,7 @@ def output_to_dates(output)
     while ! date.sunday?
         date -= 1
     end
-    date -= 364
+    date -= 7*53
 
     y = output.size
     x = output[0].size
