@@ -28,6 +28,9 @@
 
 # are Sundays always on top for the contribution summary?
 
+# character constants
+load 'characters.rb'
+
 width = 10
 lines = 5
 
@@ -36,12 +39,20 @@ lines = 5
 # variant so different objects are used
 output = Array.new(lines) { Array.new(width, 0) }
 
-output[2][1] = 1
-output[3][2] = 1
+# TODO wrap this in function and add offset to output
+# for every line of the character
+for n in (0..A.size-1) do
+    # for every block in the line
+    for m in (0..A[0].size-1)
+        # add to output
+        output[n][m] = A[n][m]
+    end
+end
 
 output.each do |line|
     line.each do |val|
-        print val
+        #TODO make print actually representative (maybe HTML?)
+        print val == 1 ? "■" : "□"
     end
     print "\n"
 end
