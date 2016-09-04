@@ -39,6 +39,7 @@ lines = 7
 # where to start the message in the array in for form [y,x]
 offset = [1,5]
 
+message = "YO! :o) 123"
 # if Array.new uses (lines, Array.new...) then same object is used for each line
 # which means a change to one line = a change to them all. Instead use block
 # variant so different objects are used
@@ -59,11 +60,40 @@ def add_character(character, output, offset)
     return output
 end
 
-output = add_character(Y, output, offset)
-offset[1] += 4
-output = add_character(O, output, offset)
-offset[1] += 4
-output = add_character(BANG, output, offset)
+message.scan(/./).each do |character|
+    case character
+    when /[A-Z]/
+        character_array = eval(character)
+    when /[0-9]/
+        character_array = eval("N_#{character}")
+    when ':'
+        character_array = COL
+    when ';'
+        character_array = SCOL
+    when '!'
+        character_array = BANG
+    when '('
+        character_array = LBRA
+    when ')'
+        character_array = RBRA
+    when '|'
+        character_array = BAR
+    when '='
+        character_array = EQL
+    when '+'
+        character_array = PLUS
+    when '-'
+        character_array = MIN
+    when 'o'
+        character_array = SMO
+    when '?'
+        character_array = QU
+    else # if the character isn't recognised it'll put a space
+        character_array = SPACE
+    end
+    output = add_character(character_array, output, offset)
+    offset[1] += 4
+end
 
 # print output
 output.each do |line|
