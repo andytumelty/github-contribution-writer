@@ -60,6 +60,36 @@ def add_character(character, output, offset)
     return output
 end
 
+def output_to_dates(output)
+    # this would've been easier had I done arrays of columns rather than lines,
+    # but here's goes nothing...
+
+    # assume top left of output = last occurring Sunday - 1 year
+    # so that date is...
+    date = Date.today
+    while ! date.sunday?
+        date -= 1
+    end
+    date -= 364
+
+    y = output.size
+    x = output[0].size
+
+    dates = Hash.new
+
+    for n in (0..x-1)
+        for m in (0..y-1)
+            val = output[m][n]
+            if val > 0
+                dates[date] = val
+            end
+            date += 1
+        end
+    end
+
+    return dates
+end
+
 message.scan(/./).each do |character|
     case character
     when /[A-Z]/
@@ -94,6 +124,8 @@ message.scan(/./).each do |character|
     output = add_character(character_array, output, offset)
     offset[1] += 4
 end
+
+dates = output_to_dates(output)
 
 # print output
 output.each do |line|
