@@ -28,6 +28,7 @@
 
 # are Sundays always on top for the contribution summary?
 
+require 'date'
 # character constants
 load 'characters.rb'
 
@@ -39,7 +40,16 @@ lines = 7
 # where to start the message in the array in for form [y,x]
 offset = [1,5]
 
-message = "YO! :o) 123"
+# commit this many times. Affects the darkness of the spots on your contribution
+# summary, depning on your previous commit history. You probably want to set
+# this to a sensible level above what your current max daily contribution has
+# been
+commit_times = 20
+
+message = "YO! Bo) 123"
+
+supported_characters = /[A-Z0-9o:;!()|=+-?]/
+
 # if Array.new uses (lines, Array.new...) then same object is used for each line
 # which means a change to one line = a change to them all. Instead use block
 # variant so different objects are used
@@ -53,6 +63,7 @@ def add_character(character, output, offset)
     for n in (0..character.size-1) do
         # for every block in the line
         for m in (0..character[0].size-1)
+            # TODO what if offset overlaps?
             # add to output
             output[n + offset[0]][m + offset[1]] = character[n][m]
         end
@@ -135,3 +146,21 @@ output.each do |line|
     end
     print "\n"
 end
+
+File.open("contribution_set", "w") { |file|
+    file.puts "# github-contribution-writer commands, generated @ #{Time.now} with the"
+    file.puts "# message '#{message}"
+    file.puts "# copy this file to your isolated contribution repo and run in your shell"
+    file.puts "# by running '. ./contribution_set' then do a git push and see the magic"
+    file.puts "touch test"
+    val = 0
+    n = 0
+    dates.each do |key,value|
+        commit_times.times do
+            val = val == 0 ? 1 : 0
+            file.puts "echo #{val} > test && git add test && GIT_AUTHOR_DATE='#{key}T00:00:00' GIT_COMMITTER_DATE='#{key}T00:00:00' git commit -m 'github-contribution-writer'"
+            n += 1
+        end
+    end
+    file.puts "echo '#{n} commits completed, push to github and check out your contribution summary!'"
+}
