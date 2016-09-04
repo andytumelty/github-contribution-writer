@@ -29,6 +29,7 @@
 # are Sundays always on top for the contribution summary?
 
 require 'date'
+
 # character constants
 load 'characters.rb'
 
@@ -36,19 +37,56 @@ load 'characters.rb'
 # each character is 4x5 (with 1px gap at right) so 13 character max depending
 # on starting offset
 width = 52
+letter_width = 4
+
 lines = 7
-# where to start the message in the array in for form [y,x]
-offset = [1,5]
+letter_height = 5
 
-# commit this many times. Affects the darkness of the spots on your contribution
-# summary, depning on your previous commit history. You probably want to set
-# this to a sensible level above what your current max daily contribution has
-# been
-commit_times = 20
+# USER INPUT
+#message = "YO! Bo) 123"
+puts "What message do you want to write?"
+puts "NB: Github can fix about 13 characters into your summary if you set the"
+puts "x offset to 0. If you go over this, commits will be written in the future"
+puts "i.e. will start to show up in your contribution summary _eventually_"
+message = ''
+while message.empty?
+    message = gets.chomp
+end
 
-message = "YO! Bo) 123"
-
+# TODO check the message only contains supported characters
 supported_characters = /[A-Z0-9o:;!()|=+-?]/
+
+puts "How many squares across should I start from? (default: 5)"
+offset_x = gets.chomp
+if offset_x.empty?
+    offset_x = 5
+else
+    offset_x = offset_x.to_i
+end
+
+puts "How many squares down should I start from? (default: 1)"
+offset_y = gets.chomp
+if offset_y.empty?
+    offset_y = 1
+else
+    offset_y = offset_y.to_i
+end
+
+# where to start the message in the array in for form [y,x]
+offset = [offset_y, offset_x]
+
+puts "How many times should I commit when writing your contribution summary? (default: 20)"
+puts "NB: this is pretty personal, it seems to come out rather nicely if you check what"
+puts "your current max daily commit history has been and double that."
+puts "If this is too low, the message won't show, if it's too high then your actual commit"
+puts "history will fade into the background (but your might want that...)"
+commit_times = gets.chomp
+if commit_times.empty?
+    commit_times = 20
+else
+    commit_times = commit_times.to_i
+end
+
 
 # if Array.new uses (lines, Array.new...) then same object is used for each line
 # which means a change to one line = a change to them all. Instead use block
